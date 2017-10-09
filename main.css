@@ -1,0 +1,186 @@
+/* === Meyer Reset & border box (in moderation) === */
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: Arial;
+  font-size: 100%;
+  vertical-align: baseline;
+  height: 100%;
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+a:link, a:visited, a:hover, a:active {
+  color: #000; }
+
+/* Font import */
+@font-face {
+  font-family: DIN-Eng;
+  src: url("../fonts/DIN 1451 Std Engschrift.ttf") format("truetype"); }
+
+@font-face {
+  font-family: DIN-Mittel;
+  src: url("../fonts/DIN 1451 Std Mittelschrift.ttf") format("truetype"); }
+
+@font-face {
+  font-family: Gill-Sans-Semibold;
+  src: url("../fonts/Gill Sans SemiBold.ttf") format("truetype"); }
+
+/* Font variables */
+/* Colours */
+/* black & *white* */
+/* $colour-background: #fff;
+$colour-type-main: #000;
+$colour-type-light: #ccc;
+$colour-type-medium: #999;
+$colour-node: #000;
+$colour-map-outline: #ccc;
+$colour-map-countries: #dcdcdc;
+$colour-highlight: #ff1493;
+ */
+/* *black* & white */
+/* Breakpoints */
+/* Debug */
+/* ----- */
+div {
+  /* border: 1px solid steelblue; */ }
+
+h1, h2, h3 {
+  /* border:  1px solid tomato; */ }
+
+/* General */
+/* ------- */
+body {
+  /* font-family: Montserrat, sans-serif; */
+  /* font-family: $font-gill-semibold; */
+  font-family: DIN-Mittel;
+  background: #111;
+  color: #ccc; }
+
+#header h1 {
+  /* margin-left: 1rem; */ }
+
+#header h4 {
+  margin-left: 0.5rem;
+  color: #999; }
+
+/* Dimensions */
+/* ---------- */
+#header {
+  /* border: 1px solid #ccc; */
+  width: 60vw;
+  height: 10vh; }
+
+#controls {
+  /* border: 1px solid #ccc; */
+  width: 60vw;
+  height: 3vh; }
+
+#visual {
+  /* border: 1px solid #ccc; */
+  width: 60vw;
+  height: 80vh; }
+
+#context {
+  /* border: 1px solid #ccc; */
+  width: 40vw;
+  height: 80vh; }
+
+#footer {
+  /* border: 1px solid #ccc; */
+  width: 100vw;
+  height: 6vh; }
+
+/* Structure */
+/* --------- */
+#header, #controls, #footer, #content, #links {
+  display: flex; }
+
+#context, #cinema-info {
+  display: flex;
+  flex-direction: column; }
+
+#header, #controls {
+  justify-content: center; }
+
+#header {
+  align-items: center; }
+
+/* Elements */
+/* -------- */
+.intro-text {
+  pointer-events: none;
+  fill: #ccc; }
+
+.node {
+  cursor: pointer;
+  fill: #fff; }
+
+.node-text {
+  font-family: Gill-Sans-Semibold;
+  fill: #ccc; }
+
+/* Map */
+/* --- */
+.map.country {
+  fill: none;
+  stroke-width: 1;
+  stroke: #555; }
+
+.map.outline {
+  fill: none;
+  stroke-width: 5;
+  stroke: #444; }
+
+/* Buttons */
+/* ------- */
+button {
+  font-family: DIN-Mittel;
+  font-size: 0.8em;
+  color: #555;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #555;
+  margin: 0 0.5rem;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  transition: all 250ms; }
+
+button:hover {
+  color: #ff1493;
+  border-color: #ff1493; }
+
+button.highlight-button {
+  color: #ccc;
+  border-bottom: 1px solid #ccc; }
+
+/* Context */
+/* ------- */
+h2, h3, #vimeo-player, #cinema-info-adress, #links {
+  margin: 0.3rem 0.5rem; }
+
+#cinema-city {
+  margin-top: 0;
+  margin-bottom: 0.7em; }
+
+#cinema-info-adress a {
+  color: #ccc;
+  text-decoration: none; }
+
+#links div {
+  padding: 0;
+  margin-right: 0.5em; }
+
+#links a {
+  color: #ccc;
+  text-decoration: none;
+  padding: 0 0 0.3em 0;
+  border-bottom: 1px solid #ccc;
+  transition: all 250ms; }
+
+#links a:hover {
+  color: #ff1493;
+  border-color: #ff1493; }
