@@ -1,6 +1,6 @@
 # 66kinos
 
-index paths: 
+index.html paths: 
 * libs
 * main.js
 * main.css
