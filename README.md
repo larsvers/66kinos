@@ -1,5 +1,14 @@
 # 66kinos
 
+
+### style
+
+
+
+
+
+### changes
+
 index.html paths: 
 * libs
 * main.js
