@@ -3,6 +3,7 @@
 
 ### style
 
+![black or white](https://raw.githubusercontent.com/larsvers/66kinos/master/other/Bw vs bW.png)
 
 
 
