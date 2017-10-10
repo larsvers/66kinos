@@ -41,7 +41,7 @@ function type(d) {
     video_url: d.video_url,
     video_id: +d.video_id,
     image: d.image
-  }
+  };
 
 } // vis.type()
 
@@ -142,9 +142,9 @@ function allowButtons(allow) {
 function displaySkip(display) {
 
   if (display) {
-    d3.select('#controls #button-skip').style('display', 'inherit')
+    d3.select('#controls #button-skip').style('display', 'inherit');
   } else {
-    d3.select('#controls #button-skip').style('display', 'none')
+    d3.select('#controls #button-skip').style('display', 'none');
   }
 
 } // displaySkip()
@@ -202,7 +202,7 @@ function initialVisualLayout(nodes) {
     .attr('id', function(d) { return d.kino_name_escaped; })
     .attr('d', d3.symbol().type(d3.symbolTriangle).size(30))
     .attr('transform', 'rotate(180)')
-    .style('opacity', 0)
+    .style('opacity', 0);
 
   // nodeG.append('path')
   //   .attr('class', 'node')
@@ -215,17 +215,17 @@ function initialVisualLayout(nodes) {
 
   nodeG.append('text')
     .attr('class', 'node-text')
-    .attr('id', function(d) { return 'text-' + d.kino_name_escaped})
+    .attr('id', function(d) { return 'text-' + d.kino_name_escaped; })
     .text(function(d) { return d.kino_name + ' ' + d.kino_stadt; })
     .attr('font-size', '0.7em')
     .attr('dx', '0.5em')
     .attr('dy', '0.35em')
-    .style('opacity', 0)
+    .style('opacity', 0);
 
   // calculate average text length to be used for positioning
   var textLengths = [];
   nodeG.nodes().forEach(function(el) {
-    textLengths.push(el.getBBox().width)
+    textLengths.push(el.getBBox().width);
   });
 
   vis.dims.meanText = d3.mean([d3.mean(textLengths), d3.max(textLengths)]);
@@ -285,7 +285,7 @@ function setupMap(geoOutline, geoCountries) {
 
 function drawMap() {
 
-  var gMap = vis.elements.svg.insert('g', ':first-child').attr('class', 'map-g')
+  var gMap = vis.elements.svg.insert('g', ':first-child').attr('class', 'map-g');
 
   // countries
   gMap.selectAll('.map')
@@ -293,7 +293,7 @@ function drawMap() {
     .enter().append('path')
       .attr('class', 'map country')
       .attr('d', vis.maptools.path)
-      .style('opacity', 0)
+      .style('opacity', 0);
 
   // outline
   gMap.selectAll('.outline')
@@ -301,7 +301,7 @@ function drawMap() {
     .enter().append('path')
       .attr('class', 'map outline')
       .attr('d', vis.maptools.path)
-      .style('opacity', 0)
+      .style('opacity', 0);
 
 } // drawMap()
 
@@ -312,12 +312,23 @@ function drawMap() {
 
 function nodesAlphabeticalCinema(nodes) {
 
+  // Prep finding x
+  var l = nodes.length;
+  var elementLength = vis.dims.maxText + vis.dims.radius + vis.dims.padding * 15; // padding factor found through try-out
+
+  // Prep finding y
+  var mid = Math.ceil(l/2);
+
   var newNodes = nodes.map(function(el, i) {
 
-    nodes[i].alphabeticalCinX = vis.dims.width/2 - vis.dims.meanText/2;
-    nodes[i].alphabeticalCinY = vis.yScale(+nodes[i].alphabet_kino);
+    // Finding x and y
+    var xPos = +nodes[i].alphabet_kino < l/2 ? vis.dims.width * 0.56 - elementLength : vis.dims.width * 0.56; // width multiplicator found through try-out
+    var yPos = +nodes[i].alphabet_kino % mid;
 
-    return nodes[i]
+    nodes[i].alphabeticalCinX = xPos;
+    nodes[i].alphabeticalCinY = vis.yScale(yPos);
+
+    return nodes[i];
 
   });
 
@@ -327,12 +338,23 @@ function nodesAlphabeticalCinema(nodes) {
 
 function nodesAlphabeticalCity(nodes) {
 
+  // Prep finding x
+  var l = nodes.length;
+  var elementLength = vis.dims.maxText + vis.dims.radius + vis.dims.padding * 15;
+
+  // Prep finding y
+  var mid = Math.ceil(l/2);
+
   var newNodes = nodes.map(function(el, i) {
 
-    nodes[i].alphabeticalCityX = vis.dims.width/2 - vis.dims.meanText/2;
-    nodes[i].alphabeticalCityY = vis.yScale(+nodes[i].alphabet_stadt);
+    // Finding x and y
+    var xPos = +nodes[i].alphabet_stadt < l/2 ? vis.dims.width * 0.56 - elementLength : vis.dims.width * 0.56;
+    var yPos = +nodes[i].alphabet_stadt % mid;
 
-    return nodes[i]
+    nodes[i].alphabeticalCityX = xPos;
+    nodes[i].alphabeticalCityY = vis.yScale(yPos);
+
+    return nodes[i];
 
   });
 
@@ -342,12 +364,23 @@ function nodesAlphabeticalCity(nodes) {
 
 function nodesVisitingOrder(nodes) {
 
+  // Prep finding x
+  var l = nodes.length;
+  var elementLength = vis.dims.maxText + vis.dims.radius + vis.dims.padding * 15;
+
+  // Prep finding y
+  var mid = Math.ceil(l/2);
+
   var newNodes = nodes.map(function(el, i) {
 
-    nodes[i].visitingX = vis.dims.width/2 - vis.dims.meanText/2;
-    nodes[i].visitingY = vis.yScale(+nodes[i].reihenfolge);
+    // Finding x and y
+    var xPos = +nodes[i].reihenfolge < l/2 ? vis.dims.width * 0.56 - elementLength : vis.dims.width * 0.56;
+    var yPos = +nodes[i].reihenfolge % mid;
 
-    return nodes[i]
+    nodes[i].visitingX = xPos;
+    nodes[i].visitingY = vis.yScale(yPos);
+
+    return nodes[i];
 
   });
 
@@ -369,13 +402,13 @@ function positionAlphabeticalCinema() {
   highlightButton(d3.select('#button-cinema'));
   vis.state = 'kino';
 
-  vis.sim.stop()
+  vis.sim.stop();
 
   vis.sim
       .force('center', null)
       .force('collide', null)
       .force('xPos', d3.forceX(function(d) { return d.alphabeticalCinX; }).strength(0.5))
-      .force('yPos', d3.forceY(function(d) { return d.alphabeticalCinY; }).strength(0.5))
+      .force('yPos', d3.forceY(function(d) { return d.alphabeticalCinY; }).strength(0.5));
 
   vis.sim.alpha(0.5).restart();
 
@@ -390,13 +423,13 @@ function positionAlphabeticalCity() {
   highlightButton(d3.select('#button-city'));
   vis.state = 'stadt';
 
-  vis.sim.stop()
+  vis.sim.stop();
 
   vis.sim
       .force('center', null)
       .force('collide', null)
       .force('xPos', d3.forceX(function(d) { return d.alphabeticalCityX; }).strength(0.5))
-      .force('yPos', d3.forceY(function(d) { return d.alphabeticalCityY; }).strength(0.5))
+      .force('yPos', d3.forceY(function(d) { return d.alphabeticalCityY; }).strength(0.5));
 
   vis.sim.alpha(0.5).restart();
 
@@ -411,7 +444,7 @@ function positionVisitingOrder() {
   highlightButton(d3.select('#button-date'));
   vis.state = 'datum';
 
-  vis.sim.stop()
+  vis.sim.stop();
 
   vis.sim
       // .velocityDecay(0.1)
@@ -420,7 +453,7 @@ function positionVisitingOrder() {
       .force('center', null)
       .force('collide', null)
       .force('xPos', d3.forceX(function(d) { return d.visitingX; }).strength(0.5))
-      .force('yPos', d3.forceY(function(d) { return d.visitingY; }).strength(0.5))
+      .force('yPos', d3.forceY(function(d) { return d.visitingY; }).strength(0.5));
 
   vis.sim.alpha(0.5).restart();
 
@@ -439,7 +472,7 @@ function transitionLocation() {
   highlightButton(d3.select('#button-map'));
   vis.state = 'karte';
 
-  vis.sim.stop()
+  vis.sim.stop();
 
   d3.selectAll('.node-group')
     .transition().style('opacity', 0.4)
@@ -473,7 +506,7 @@ function positionLocation() {
   highlightButton(d3.select('#button-map'));
   vis.state = 'karte';
 
-  vis.sim.stop()
+  vis.sim.stop();
 
   vis.sim
       // .velocityDecay(0.1)
@@ -482,13 +515,15 @@ function positionLocation() {
       .force('center', null)
       .force('collide', null)
       .force('xPos', d3.forceX(function(d) { return vis.maptools.projection([d.lon, d.lat])[0]; }).strength(0.5))
-      .force('yPos', d3.forceY(function(d) { return vis.maptools.projection([d.lon, d.lat])[1]; }).strength(0.5))
+      .force('yPos', d3.forceY(function(d) { return vis.maptools.projection([d.lon, d.lat])[1]; }).strength(0.5));
 
   vis.sim.alpha(0.5).restart();
 
 } // positionLocation()
 
-function setText(text, position, dur) {
+function setText(text, position, dur, large) {
+
+  if (arguments.length < 4) { large = false; }
 
   // Update
   var textNode = d3.select('.text-g').selectAll('.intro-text')
@@ -500,13 +535,14 @@ function setText(text, position, dur) {
     .merge(textNode)
       .text(function(d) { return d; })
       .attr('class', 'intro-text')
+      .classed('large', large)
       .attr('x', position.x)
       .attr('y', position.y)
       .attr('dy', '1em')
       .attr('text-anchor', position.anchor)
       .style('fill-opacity', 1e-6)
     .transition().duration(dur)
-      .style('fill-opacity', 1)
+      .style('fill-opacity', 1);
 
   // Exit
   textNode.exit()
@@ -596,7 +632,7 @@ function circleOut(d) {
   d3.select(this).call(transRotate, '180');
 
   if (vis.state === 'karte') { 
-    d3.select('.node-text#text-' + d.kino_name_escaped).call(transOpacity, 0)
+    d3.select('.node-text#text-' + d.kino_name_escaped).call(transOpacity, 0);
   } else {
     d3.select('.node-text#text-' + d.kino_name_escaped).call(transPosition, '0.5em');
   }
@@ -607,7 +643,7 @@ function circleOut(d) {
 function textOver(d) {
 
   d3.select('.node#' + d.kino_name_escaped).call(transRotate, '90');
-  d3.select(this).call(transPosition, '0.8em')
+  d3.select(this).call(transPosition, '0.8em');
 
 } // textOver()
 
@@ -641,7 +677,7 @@ function textDown(d) {
 function textOut(d) {
 
   d3.select('.node#' + d.kino_name_escaped).call(transRotate, '180');
-  d3.select(this).call(transPosition, '0.5em')
+  d3.select(this).call(transPosition, '0.5em');
 
 } // textOut()
 
@@ -681,93 +717,99 @@ function story() {
   d3.select('.chart-g').insert('g', ':first-child').attr('class', 'text-g');
 
   // Init scoped variables
-  var position, text;
+  var position, text, dur;
 
 
   // Intro text
 
-  text = ['Von Oktober 2014 bis Februar 2016'];
+  text = [''];
   position = { x: vis.dims.width/2, y: vis.dims.height/2, anchor: 'middle' };
   dur = 1000;
   setText(text, position, dur);
 
   timers[0] = d3.timeout(function() { 
-    text = ['habe ich über 66 Kinos besucht'];
-    setText(text, position, dur) 
+    text = ['Von Oktober 2014 bis Februar 2016'];
+    setText(text, position, dur, true);
   }, dur * 2);
 
   timers[1] = d3.timeout(function() { 
-    text = ['und das Leben der Kinos und Ihrer Menschen dokumentiert.'];
-    setText(text, position, dur) 
+    text = ['habe ich über 66 Kinos besucht'];
+    setText(text, position, dur, true); 
   }, dur * 5);
 
   timers[2] = d3.timeout(function() { 
-    text = [];
-    setText(text, position, dur)
+    text = ['und das Leben der Kinos und Ihrer Menschen dokumentiert.'];
+    setText(text, position, dur, true);
   }, dur * 8);
 
   timers[3] = d3.timeout(function() { 
-    text = ['Heraus kammen viele Geschichten...'];
-    setText(text, position, dur)
-  }, dur * 10);
-
+    text = [];
+    setText(text, position, dur);
+  }, dur * 11);
 
   timers[4] = d3.timeout(function() { 
-    text = ['...eine für jedes Kino:'];
-    setText(text, position, dur)
+    text = ['Heraus kamen viele Geschichten...'];
+    setText(text, position, dur, true);
   }, dur * 12);
 
+
   timers[5] = d3.timeout(function() { 
-    text = [];
-    setText(text, position, dur * 2)
+    text = ['...eine für jedes Kino:'];
+    setText(text, position, dur, true);
   }, dur * 15);
+
+  timers[6] = d3.timeout(function() { 
+    text = [];
+    setText(text, position, dur * 2);
+  }, dur * 18);
 
   // Set and kick off the initial simulation
 
-  timers[6] = d3.timeout(function() { 
+  timers[7] = d3.timeout(function() { 
     showCircles(true);
     initialSimulation(vis.nodes);
-  }, dur * 16);
+  }, dur * 19.5);
 
   // Sortings and map
 
-  timers[7] = d3.timeout(function() { 
-    text = ['Jedes Dreieck repräsentiert ein Kino.'];
-    position = { x: vis.dims.width/2, y: vis.dims.height, anchor: 'middle' };
-    setText(text, position, dur)
-  }, dur * 19);
-
   timers[8] = d3.timeout(function() { 
+    text = ['Jedes Dreieck repräsentiert ein Kino.'];
+    position = { x: vis.dims.width/2, y: -15, anchor: 'middle' };
+    setText(text, position, dur);
+  }, dur * 23);
+
+  timers[9] = d3.timeout(function() { 
     text = ['Du kannst sie sortieren nach Kinonamen...'];
-    setText(text, position, dur)
-  }, dur * 21);
+    setText(text, position, dur);
+  }, dur * 25);
 
-  timers[9] = d3.timeout(positionAlphabeticalCinema, dur * 22)
+  timers[10] = d3.timeout(positionAlphabeticalCinema, dur * 26);
 
-  timers[10] = d3.timeout(function() { 
+  timers[11] = d3.timeout(function() { 
     text = ['...nach Stadt...'];
-    setText(text, position, dur)
-  }, dur * 24);
+    setText(text, position, dur);
+  }, dur * 28);
 
-  timers[11] = d3.timeout(positionAlphabeticalCity, dur * 25)
+  timers[12] = d3.timeout(positionAlphabeticalCity, dur * 29);
 
-  timers[12] = d3.timeout(function() { 
+  timers[13] = d3.timeout(function() { 
     text = ['...nach der Reihenfolge meiner Besuche...'];
-    setText(text, position, dur)
-  }, dur * 27);
+    setText(text, position, dur);
+  }, dur * 31);
 
-  timers[13] = d3.timeout(positionVisitingOrder, dur * 28)
+  timers[14] = d3.timeout(positionVisitingOrder, dur * 32);
 
-  timers[14] = d3.timeout(function() { 
-    text = ['...oder finde sie auf der Karte.'];
-    setText(text, position, dur)
-  }, dur * 30);
+  timers[15] = d3.timeout(function() { 
+    text = ['...oder finde sie auf einer Karte.'];
+    setText(text, position, dur);
+  }, dur * 34);
 
-  timers[15] = d3.timeout(transitionLocation, dur * 31)
+  timers[16] = d3.timeout(transitionLocation, dur * 35);
 
-  timers[16] = d3.timeout(function() { 
+  timers[17] = d3.timeout(function() { 
+    position = { x: vis.dims.width/2, y: vis.dims.height, anchor: 'middle' };
     text = ['Klick auf ein Kino und schau Dir seine Geschichte an'];
-    setText(text, position, dur)
+    setText(text, position, dur);
 
     // Allow button interaction and remove skip button
     allowButtons(true);
@@ -776,7 +818,7 @@ function story() {
     // Allow node interaction
     allowNodePointer(true);
 
-  }, dur * 40);
+  }, dur * 44);
 
 } // story()
 
@@ -791,13 +833,13 @@ function cancelStory() {
   allowTextPointer(true);
 
   // stop the story and potential text transitions
-  timers.forEach(function(el) { el.stop() }); // clear out all timers 
+  timers.forEach(function(el) { el.stop(); }); // clear out all timers 
   d3.select('g.chart-g').selectAll('*').interrupt(); // interrupt all transitions
 
   // update the text
   var text = ['Klick auf ein Kino und schau Dir seine Geschichte an'];
   var position = { x: vis.dims.width/2, y: vis.dims.height, anchor: 'middle' };
-  setText(text, position, 1000)
+  setText(text, position, 1000);
   
   // move to map
   if (!vis.sim) {
@@ -832,18 +874,18 @@ function ready(error, data, gerOutline, gerCountries) {
   initialVisualLayout(vis.nodes);
 
   // Set up the map
-  setupMap(gerOutline, gerCountries)
+  setupMap(gerOutline, gerCountries);
 
   // Draw the map
   drawMap();
 
   // Calculate y scale for positioning (pull the lower end up a little to leave space for the text)
-  vis.yScale = d3.scaleLinear().domain([0, vis.nodes.length]).range([0, vis.dims.height * 0.97]);
+  vis.yScale = d3.scaleLinear().domain([0, Math.ceil(vis.nodes.length/2)]).range([vis.dims.height*0.05, vis.dims.height*0.85]);
 
   // Calculate and augment positions
-  vis.nodes = nodesAlphabeticalCinema(vis.nodes)
-  vis.nodes = nodesAlphabeticalCity(vis.nodes)
-  vis.nodes = nodesVisitingOrder(vis.nodes)
+  vis.nodes = nodesAlphabeticalCinema(vis.nodes);
+  vis.nodes = nodesAlphabeticalCity(vis.nodes);
+  vis.nodes = nodesVisitingOrder(vis.nodes);
 
   // play intro
   story();
@@ -854,16 +896,16 @@ function ready(error, data, gerOutline, gerCountries) {
 
   // Zoom
   var zoom = d3.zoom().scaleExtent([0.75, 2.5]).on('zoom', zoomed);
-  d3.select('#visual svg').call(zoom)
+  d3.select('#visual svg').call(zoom);
 
 
   // circles
-  d3.selectAll('.node').on('mouseover', circleOver)
-  d3.selectAll('.node').on('mousedown', circleDown)
-  d3.selectAll('.node').on('mouseout', circleOut)
-  d3.selectAll('.node-text').on('mouseover', textOver)
-  d3.selectAll('.node-text').on('mousedown', textDown)
-  d3.selectAll('.node-text').on('mouseout', textOut)
+  d3.selectAll('.node').on('mouseover', circleOver);
+  d3.selectAll('.node').on('mousedown', circleDown);
+  d3.selectAll('.node').on('mouseout', circleOut);
+  d3.selectAll('.node-text').on('mouseover', textOver);
+  d3.selectAll('.node-text').on('mousedown', textDown);
+  d3.selectAll('.node-text').on('mouseout', textOut);
 
 } // ready()
 
@@ -885,16 +927,11 @@ d3.select('button#button-skip').on('mousedown', cancelStory);
 
 function zoomed() {
 
-  // Allow up down pan but not right left pan?
-
   var transform = d3.event.transform;
-
-  if (vis.state !== 'karte') { transform.x = 0 } // constrain zoom for lists
 
   d3.select('.chart-g').attr('transform', transform.toString());
 
 } // zoomed()
-
 
 
 /* Data load */
