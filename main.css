@@ -20,15 +20,15 @@ a:link, a:visited, a:hover, a:active {
 /* Font import */
 @font-face {
   font-family: DIN-Eng;
-  src: url("../fonts/DIN 1451 Std Engschrift.ttf") format("truetype"); }
+  src: url("fonts/DIN 1451 Std Engschrift.ttf") format("truetype"); }
 
 @font-face {
   font-family: DIN-Mittel;
-  src: url("../fonts/DIN 1451 Std Mittelschrift.ttf") format("truetype"); }
+  src: url("fonts/DIN 1451 Std Mittelschrift.ttf") format("truetype"); }
 
 @font-face {
   font-family: Gill-Sans-Semibold;
-  src: url("../fonts/Gill Sans SemiBold.ttf") format("truetype"); }
+  src: url("fonts/Gill Sans SemiBold.ttf") format("truetype"); }
 
 /* Font variables */
 /* Colours */
