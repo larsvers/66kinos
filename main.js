@@ -13,7 +13,7 @@ vis.yScale;
 vis.geo;
 vis.maptools;
 vis.state; // 'kino', 'stadt', 'datum', 'karte'
-vis.player; 
+vis.player;
 
 
 /* Utlities */
