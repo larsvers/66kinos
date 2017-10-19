@@ -13,7 +13,7 @@ vis.yScale;
 vis.geo;
 vis.maptools;
 vis.state; // 'kino', 'stadt', 'datum', 'karte'
-vis.player;
+vis.player; 
 
 
 /* Utlities */
@@ -665,10 +665,19 @@ function textDown(d) {
     d3.selectAll('#cinema-info').transition().style('opacity', 1);
 
     d3.select('#cinema-info-text').html(d.kino_info);
-    d3.select('#cinema-info-adress').html(d.kino_strasse_nr + '<br>' + d.kino_plz + ' ' + d.kino_stadt + '<br>' + '<a href="tel:' + d.kino_tel + '">' + d.kino_tel + '</a>');
 
-    d3.select('#cinema-info-link a').attr('href', d.kino_url).html('kino-link');
-    d3.select('#cinema-map-link a').attr('href', d.kino_map).html('kino-karte');
+    var infoHtml = 
+      (d.kino_strasse_nr !== 'NA' ? d.kino_strasse_nr + '<br>' : '') +
+      (d.kino_plz !== 'NA' ? d.kino_plz + ' ' : '') +
+      (d.kino_stadt !== 'NA' ? d.kino_stadt + '<br>' : '') +
+      (d.kino_tel !== 'NA' ? '<a href="tel:' + d.kino_tel + '">' + d.kino_tel + '</a>' : '');
+
+    d3.select('#cinema-info-adress').html(infoHtml);
+      // .html(d.kino_strasse_nr + '<br>' + d.kino_plz + ' ' + d.kino_stadt + '<br>' + '<a href="tel:' + d.kino_tel + '">' + d.kino_tel + '</a>');
+      
+
+    if (d.kino_url !== 'NA') { d3.select('#cinema-info-link a').attr('href', d.kino_url).html('link'); }
+    if (d.kino_map !== 'NA') { d3.select('#cinema-map-link a').attr('href', d.kino_map).html('karte'); }
 
   }); // player.ready()
 
@@ -738,7 +747,7 @@ function story() {
   }, dur * 5);
 
   timers[2] = d3.timeout(function() { 
-    text = ['und das Leben der Kinos und Ihrer Menschen dokumentiert.'];
+    text = ['und das Leben der Kinos und Ihrer Macher gefilmt.'];
     setText(text, position, dur, true);
   }, dur * 8);
 
@@ -748,65 +757,70 @@ function story() {
   }, dur * 11);
 
   timers[4] = d3.timeout(function() { 
-    text = ['Heraus kamen viele Geschichten...'];
+    text = ['Die Reise habe ich im Film 66KINOS dokumentiert,'];
     setText(text, position, dur, true);
   }, dur * 12);
 
-
   timers[5] = d3.timeout(function() { 
-    text = ['...eine für jedes Kino:'];
+    text = ['der viele Geschichten erzählt...'];
     setText(text, position, dur, true);
   }, dur * 15);
 
+
   timers[6] = d3.timeout(function() { 
+    text = ['...eine für jedes Kino:'];
+    setText(text, position, dur, true);
+  }, dur * 18);
+
+  timers[7] = d3.timeout(function() { 
     text = [];
     setText(text, position, dur * 2);
-  }, dur * 18);
+  }, dur * 21.5);
 
   // Set and kick off the initial simulation
 
-  timers[7] = d3.timeout(function() { 
+  timers[8] = d3.timeout(function() { 
     showCircles(true);
     initialSimulation(vis.nodes);
-  }, dur * 19.5);
+  }, dur * 23);
 
   // Sortings and map
 
-  timers[8] = d3.timeout(function() { 
+  timers[9] = d3.timeout(function() { 
     text = ['Jedes Dreieck repräsentiert ein Kino.'];
     position = { x: vis.dims.width/2, y: -15, anchor: 'middle' };
     setText(text, position, dur);
-  }, dur * 23);
+  }, dur * 26.5);
 
-  timers[9] = d3.timeout(function() { 
+  timers[10] = d3.timeout(function() { 
     text = ['Du kannst sie sortieren nach Kinonamen...'];
     setText(text, position, dur);
-  }, dur * 25);
+  }, dur * 28.5);
 
-  timers[10] = d3.timeout(positionAlphabeticalCinema, dur * 26);
+  timers[11] = d3.timeout(positionAlphabeticalCinema, dur * 29.5);
 
-  timers[11] = d3.timeout(function() { 
+  timers[12] = d3.timeout(function() { 
     text = ['...nach Stadt...'];
-    setText(text, position, dur);
-  }, dur * 28);
-
-  timers[12] = d3.timeout(positionAlphabeticalCity, dur * 29);
-
-  timers[13] = d3.timeout(function() { 
-    text = ['...nach der Reihenfolge meiner Besuche...'];
     setText(text, position, dur);
   }, dur * 31);
 
-  timers[14] = d3.timeout(positionVisitingOrder, dur * 32);
+  timers[13] = d3.timeout(positionAlphabeticalCity, dur * 32);
 
-  timers[15] = d3.timeout(function() { 
+  timers[14] = d3.timeout(function() { 
+    text = ['...nach der Reihenfolge meiner Besuche...'];
+    setText(text, position, dur);
+  }, dur * 33);
+
+  timers[15] = d3.timeout(positionVisitingOrder, dur * 34);
+
+  timers[16] = d3.timeout(function() { 
     text = ['...oder finde sie auf einer Karte.'];
     setText(text, position, dur);
-  }, dur * 34);
+  }, dur * 36);
 
-  timers[16] = d3.timeout(transitionLocation, dur * 35);
+  timers[17] = d3.timeout(transitionLocation, dur * 37);
 
-  timers[17] = d3.timeout(function() { 
+  timers[18] = d3.timeout(function() { 
     position = { x: vis.dims.width/2, y: vis.dims.height, anchor: 'middle' };
     text = ['Klick auf ein Kino und schau Dir seine Geschichte an'];
     setText(text, position, dur);
@@ -818,7 +832,7 @@ function story() {
     // Allow node interaction
     allowNodePointer(true);
 
-  }, dur * 44);
+  }, dur * 46);
 
 } // story()
 
@@ -938,7 +952,7 @@ function zoomed() {
 /* --------- */
 
 d3.queue()
-    .defer(d3.csv, 'data/66kinos_data_v5.csv', type)
+    .defer(d3.csv, 'data/66kinos_data_v6.csv', type)
     .defer(d3.json, 'data/d-04-simple.json') 
     .defer(d3.json, 'data/d-bl-04-simple.json') // toposimplify -s 0.0000009 -f < deutschland-bl-topo-quant.json > output.json
     .await(ready);
