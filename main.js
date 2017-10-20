@@ -862,6 +862,9 @@ function cancelStory() {
   }
   positionLocation();
 
+  // show the footer
+  d3.select('#footer').transition().style('opacity', 1);
+
 } // cancelStory()
 
 
