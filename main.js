@@ -145,6 +145,9 @@ function displaySkip(display) {
     d3.select('#controls #button-skip').style('display', 'inherit');
   } else {
     d3.select('#controls #button-skip').style('display', 'none');
+    // show the footer
+    d3.select('#footer').transition().style('opacity', 1);
+
   }
 
 } // displaySkip()
